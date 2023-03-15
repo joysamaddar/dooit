@@ -1,23 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { CreateProjectInput } from './dto/create-project.input';
-import { Project } from './project.entity';
-import { ProjectType } from './project.type';
+import { Project } from './models/project.entity';
+import { ProjectType } from './types/project.type';
 import { ObjectId } from 'mongodb';
 import { UpdateProjectInput } from './dto/update-project.input';
 
 @Injectable()
-export class ProjectsService {
+export class ProjectService {
   constructor(
     @InjectRepository(Project)
-    private readonly projectRepository: Repository<Project>,
+    private readonly projectRepository: MongoRepository<Project>,
   ) {}
 
   async getProject(id: string): Promise<ProjectType | NotFoundException> {
-    const project = await this.projectRepository.findOne({
-      where: { _id: ObjectId(id) },
-    });
+    const project = await this.projectRepository.findOne(ObjectId(id));
     if (project) {
       return project;
     }
@@ -32,21 +30,20 @@ export class ProjectsService {
     createProjectInput: CreateProjectInput,
   ): Promise<ProjectType> {
     const { name, description, tags } = createProjectInput;
-    const project = this.projectRepository.create({
-      name,
-      description,
-      tags,
-    });
+    const project = new Project();
+    project.name = name;
+    project.description = description;
+    project.tags = tags;
+    project.tasks = [];
     return await this.projectRepository.save(project);
   }
 
   async deleteProject(id: string): Promise<ProjectType | NotFoundException> {
-    const project = await this.projectRepository.findOne({
-      where: { _id: ObjectId(id) },
+    const project = await this.projectRepository.findOneAndDelete({
+      _id: ObjectId(id),
     });
-    const result = await this.projectRepository.delete({ _id: ObjectId(id) });
-    if (result.affected > 0) {
-      return project;
+    if (project.value) {
+      return project.value;
     }
     return new NotFoundException();
   }
