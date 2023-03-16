@@ -51,22 +51,13 @@ export class ProjectService {
   async updateProject(
     updateProjectInput: UpdateProjectInput,
   ): Promise<ProjectType | NotFoundException> {
-    const { id, name, description, tags } = updateProjectInput;
-    const project = await this.projectRepository.findOne({
-      where: { _id: ObjectId(id) },
-    });
+    const { id } = updateProjectInput;
+    delete updateProjectInput['id'];
+    let project = await this.projectRepository.findOne(ObjectId(id));
     if (!project) {
       return new NotFoundException();
     }
-    if (name) {
-      project.name = name;
-    }
-    if (description) {
-      project.description = description;
-    }
-    if (tags) {
-      project.tags = tags;
-    }
+    project = { ...project, ...updateProjectInput };
     return await this.projectRepository.save(project);
   }
 }

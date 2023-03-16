@@ -55,22 +55,16 @@ export class TaskService {
   async updateTask(
     taskInput: TaskInput,
   ): Promise<ProjectType | NotFoundException> {
-    const { projectId, id, name, type, status } = taskInput;
+    const { projectId, id } = taskInput;
+    delete taskInput['projectId'];
+    delete taskInput['id'];
     const project = await this.projectRepository.findOne(ObjectId(projectId));
     if (!project) {
       return new NotFoundException();
     }
     project.tasks = project.tasks.map((task) => {
       if (task.id === id) {
-        if (name) {
-          task.name = name;
-        }
-        if (type) {
-          task.type = type;
-        }
-        if (status) {
-          task.status = status;
-        }
+        task = { ...task, ...taskInput };
       }
       return task;
     });
