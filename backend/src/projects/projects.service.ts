@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { CreateProjectInput } from './dto/create-project.input';
 import { Project } from './models/project.entity';
-import { ProjectType } from './types/project.type';
 import { ObjectId } from 'mongodb';
 import { UpdateProjectInput } from './dto/update-project.input';
 
@@ -14,7 +13,7 @@ export class ProjectService {
     private readonly projectRepository: MongoRepository<Project>,
   ) {}
 
-  async getProject(id: string): Promise<ProjectType | NotFoundException> {
+  async getProject(id: string): Promise<Project | NotFoundException> {
     const project = await this.projectRepository.findOne(ObjectId(id));
     if (project) {
       return project;
@@ -22,13 +21,13 @@ export class ProjectService {
     return new NotFoundException();
   }
 
-  async getProjects(): Promise<ProjectType[]> {
+  async getProjects(): Promise<Project[]> {
     return await this.projectRepository.find({});
   }
 
   async createProject(
     createProjectInput: CreateProjectInput,
-  ): Promise<ProjectType> {
+  ): Promise<Project> {
     const { name, description, tags } = createProjectInput;
     const project = new Project();
     project.name = name;
@@ -38,7 +37,7 @@ export class ProjectService {
     return await this.projectRepository.save(project);
   }
 
-  async deleteProject(id: string): Promise<ProjectType | NotFoundException> {
+  async deleteProject(id: string): Promise<Project | NotFoundException> {
     const project = await this.projectRepository.findOneAndDelete({
       _id: ObjectId(id),
     });
@@ -50,7 +49,7 @@ export class ProjectService {
 
   async updateProject(
     updateProjectInput: UpdateProjectInput,
-  ): Promise<ProjectType | NotFoundException> {
+  ): Promise<Project | NotFoundException> {
     const { id } = updateProjectInput;
     delete updateProjectInput['id'];
     let project = await this.projectRepository.findOne(ObjectId(id));

@@ -3,8 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { CreateTaskInput } from './dto/create-task.input';
 import { Project } from './models/project.entity';
-import { ProjectType } from './types/project.type';
-import { TaskType } from './types/task.type';
 import { ObjectId } from 'mongodb';
 import { Task } from './models/task.entity';
 import { TaskInput } from './dto/task.input';
@@ -15,7 +13,7 @@ export class TaskService {
     private readonly projectRepository: MongoRepository<Project>,
   ) {}
 
-  async getTask(taskInput: TaskInput): Promise<TaskType | NotFoundException> {
+  async getTask(taskInput: TaskInput): Promise<Task | NotFoundException> {
     const { projectId, id } = taskInput;
     const project = await this.projectRepository.findOne(ObjectId(projectId));
     if (!project) {
@@ -30,7 +28,7 @@ export class TaskService {
 
   async createTask(
     createTaskInput: CreateTaskInput,
-  ): Promise<ProjectType | NotFoundException> {
+  ): Promise<Project | NotFoundException> {
     const { projectId, name, type } = createTaskInput;
     const project = await this.projectRepository.findOne(ObjectId(projectId));
     if (!project) {
@@ -40,9 +38,7 @@ export class TaskService {
     return await this.projectRepository.save(project);
   }
 
-  async deleteTask(
-    taskInput: TaskInput,
-  ): Promise<ProjectType | NotFoundException> {
+  async deleteTask(taskInput: TaskInput): Promise<Project | NotFoundException> {
     const { projectId, id } = taskInput;
     const project = await this.projectRepository.findOne(ObjectId(projectId));
     if (!project) {
@@ -52,9 +48,7 @@ export class TaskService {
     return await this.projectRepository.save(project);
   }
 
-  async updateTask(
-    taskInput: TaskInput,
-  ): Promise<ProjectType | NotFoundException> {
+  async updateTask(taskInput: TaskInput): Promise<Project | NotFoundException> {
     const { projectId, id } = taskInput;
     delete taskInput['projectId'];
     delete taskInput['id'];
