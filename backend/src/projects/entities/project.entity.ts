@@ -21,6 +21,14 @@ export class Project {
   @Field(() => [String], { defaultValue: [] })
   tags?: string[];
 
+  @Column()
+  @Field()
+  manager: string;
+
+  @Column()
+  @Field(() => [String])
+  users: string[];
+
   @Column(() => Task, { array: true })
   @Field(() => [Task], { defaultValue: [] })
   tasks?: Task[];

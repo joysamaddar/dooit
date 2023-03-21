@@ -1,10 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
+import { ArrayContains, MongoRepository } from 'typeorm';
 import { CreateProjectInput } from './dto/create-project.input';
 import { Project } from './entities/project.entity';
 import { ObjectId } from 'mongodb';
 import { UpdateProjectInput } from './dto/update-project.input';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ProjectService {
@@ -13,20 +18,28 @@ export class ProjectService {
     private readonly projectRepository: MongoRepository<Project>,
   ) {}
 
-  async getProject(id: string): Promise<Project | NotFoundException> {
+  async getProject(
+    id: string,
+    user: User,
+  ): Promise<Project | NotFoundException> {
     const project = await this.projectRepository.findOne(ObjectId(id));
-    if (project) {
+    if (project && project.users.includes(user.username)) {
       return project;
     }
     return new NotFoundException();
   }
 
-  async getProjects(): Promise<Project[]> {
-    return await this.projectRepository.find({});
+  async getProjects(user: User): Promise<Project[]> {
+    return await this.projectRepository.find({
+      where: {
+        users: ArrayContains([user.username]),
+      },
+    });
   }
 
   async createProject(
     createProjectInput: CreateProjectInput,
+    user: User,
   ): Promise<Project> {
     const { name, description, tags } = createProjectInput;
     const project = new Project();
@@ -34,21 +47,33 @@ export class ProjectService {
     project.description = description;
     project.tags = tags;
     project.tasks = [];
+    project.manager = user.username;
+    project.users = [user.username];
     return await this.projectRepository.save(project);
   }
 
-  async deleteProject(id: string): Promise<Project | NotFoundException> {
-    const project = await this.projectRepository.findOneAndDelete({
+  async deleteProject(
+    id: string,
+    user: User,
+  ): Promise<Project | NotFoundException> {
+    const project = await this.projectRepository.findOne(ObjectId(id));
+    if (project.manager !== user.username) {
+      return new UnauthorizedException(
+        'Only project managers can delete a project!',
+      );
+    }
+    const result = await this.projectRepository.findOneAndDelete({
       _id: ObjectId(id),
     });
-    if (project.value) {
-      return project.value;
+    if (result.value) {
+      return result.value;
     }
     return new NotFoundException();
   }
 
   async updateProject(
     updateProjectInput: UpdateProjectInput,
+    user: User,
   ): Promise<Project | NotFoundException> {
     const { id } = updateProjectInput;
     delete updateProjectInput['id'];
@@ -56,7 +81,40 @@ export class ProjectService {
     if (!project) {
       return new NotFoundException();
     }
+    if (project.manager !== user.username) {
+      return new UnauthorizedException('You are not allowed to make changes.');
+    }
     project = { ...project, ...updateProjectInput };
+    return await this.projectRepository.save(project);
+  }
+
+  async addUserToProject(
+    projectId: string,
+    username: string,
+    user: User,
+  ): Promise<Project | UnauthorizedException> {
+    const project = await this.projectRepository.findOne(ObjectId(projectId));
+    if (project.manager !== user.username) {
+      throw new UnauthorizedException(
+        'Only project managers can add users to a project.',
+      );
+    }
+    project.users.push(username);
+    return await this.projectRepository.save(project);
+  }
+
+  async removeUserFromProject(
+    projectId: string,
+    username: string,
+    user: User,
+  ): Promise<Project | UnauthorizedException> {
+    const project = await this.projectRepository.findOne(ObjectId(projectId));
+    if (project.manager !== user.username) {
+      throw new UnauthorizedException(
+        'Only project managers can remove users from a project.',
+      );
+    }
+    project.users = project.users.filter((data) => data !== username);
     return await this.projectRepository.save(project);
   }
 }

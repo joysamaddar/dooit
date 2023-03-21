@@ -23,7 +23,11 @@ export class Task {
   @Field()
   type: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: StatusEnum,
+    default: StatusEnum.PENDING,
+  })
   @Field()
   status: string;
 }

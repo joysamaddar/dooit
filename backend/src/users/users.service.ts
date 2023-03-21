@@ -1,13 +1,15 @@
 import {
   Injectable,
   NotAcceptableException,
-  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
+import { MongoRepository, ObjectID } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { ChangePasswordInput } from './dto/change-password.input';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UsersService {
@@ -39,5 +41,26 @@ export class UsersService {
         username,
       },
     });
+  }
+
+  async changePassword(
+    changePasswordInput: ChangePasswordInput,
+    user: User,
+  ): Promise<User | NotAcceptableException> {
+    const { oldPassword, newPassword } = changePasswordInput;
+    const result = await this.userRepository.findOne({
+      where: {
+        _id: ObjectId(user._id),
+      },
+    });
+    if (bcrypt.compare(oldPassword, result.password)) {
+      const salt = await bcrypt.genSalt();
+      result.password = await bcrypt.hash(newPassword, salt);
+      return await this.userRepository.save(result);
+    } else {
+      return new UnauthorizedException(
+        'Please check your password and try again!',
+      );
+    }
   }
 }
