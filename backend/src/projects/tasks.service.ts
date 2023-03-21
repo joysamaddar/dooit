@@ -2,9 +2,9 @@ import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { CreateTaskInput } from './dto/create-task.input';
-import { Project } from './models/project.entity';
+import { Project } from './entities/project.entity';
 import { ObjectId } from 'mongodb';
-import { Task } from './models/task.entity';
+import { Task } from './entities/task.entity';
 import { TaskInput } from './dto/task.input';
 
 export class TaskService {
@@ -34,7 +34,7 @@ export class TaskService {
     if (!project) {
       return new NotFoundException();
     }
-    project.tasks.push(new Task(name, type));
+    project.tasks.push(new Task(project.tasks.length + 1, name, type));
     return await this.projectRepository.save(project);
   }
 

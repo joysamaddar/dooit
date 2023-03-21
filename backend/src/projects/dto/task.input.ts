@@ -8,7 +8,7 @@ export class TaskInput {
   projectId: string;
 
   @Field(() => ID, { nullable: false })
-  id: string;
+  id: number;
 
   @Field({ nullable: true })
   @MinLength(3)

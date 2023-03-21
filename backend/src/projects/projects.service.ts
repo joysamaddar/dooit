@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { CreateProjectInput } from './dto/create-project.input';
-import { Project } from './models/project.entity';
+import { Project } from './entities/project.entity';
 import { ObjectId } from 'mongodb';
 import { UpdateProjectInput } from './dto/update-project.input';
 

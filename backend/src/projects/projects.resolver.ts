@@ -5,10 +5,10 @@ import { UpdateProjectInput } from './dto/update-project.input';
 import { CreateTaskInput } from './dto/create-task.input';
 import { TaskService } from './tasks.service';
 import { TaskInput } from './dto/task.input';
-import { Project } from './models/project.entity';
-import { Task } from './models/task.entity';
+import { Project } from './entities/project.entity';
+import { Task } from './entities/task.entity';
 
-@Resolver(() => Project)
+@Resolver()
 export class ProjectResolver {
   constructor(
     private readonly projectService: ProjectService,

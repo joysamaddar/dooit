@@ -1,12 +1,11 @@
 import { Column } from 'typeorm';
 import { StatusEnum } from '../dto/status.enum';
-import { v4 as uuid } from 'uuid';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType('Task')
 export class Task {
-  constructor(name: string, type: string) {
-    this.id = uuid();
+  constructor(id: number, name: string, type: string) {
+    this.id = id;
     this.name = name;
     this.type = type;
     this.status = StatusEnum.PENDING;
@@ -14,7 +13,7 @@ export class Task {
 
   @Column()
   @Field(() => ID)
-  id: string;
+  id: number;
 
   @Column()
   @Field()

@@ -5,6 +5,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configSchema } from './config.schema';
 import { ProjectsModule } from './projects/projects.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { ProjectsModule } from './projects/projects.module';
       },
     }),
     ProjectsModule,
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
