@@ -10,12 +10,14 @@ import { Project } from './entities/project.entity';
 import { ObjectId } from 'mongodb';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProjectService {
   constructor(
     @InjectRepository(Project)
     private readonly projectRepository: MongoRepository<Project>,
+    private readonly userService: UsersService,
   ) {}
 
   async getProject(
@@ -30,10 +32,11 @@ export class ProjectService {
   }
 
   async getProjects(user: User): Promise<Project[]> {
-    return await this.projectRepository.find({
-      where: {
-        users: ArrayContains([user.username]),
-      },
+    const projects = await this.projectRepository.find();
+    return projects.filter((project) => {
+      if (project.users.includes(user.username)) {
+        return project;
+      }
     });
   }
 
@@ -93,6 +96,10 @@ export class ProjectService {
     username: string,
     user: User,
   ): Promise<Project | UnauthorizedException> {
+    const exists = await this.userService.user(username);
+    if (!exists) {
+      throw new NotFoundException("The user with this username wasn't found");
+    }
     const project = await this.projectRepository.findOne(ObjectId(projectId));
     if (project.manager !== user.username) {
       throw new UnauthorizedException(

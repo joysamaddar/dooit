@@ -43,6 +43,10 @@ export class UsersService {
     });
   }
 
+  async userWithId(id: string): Promise<User> {
+    return await this.userRepository.findOne(ObjectId(id));
+  }
+
   async changePassword(
     changePasswordInput: ChangePasswordInput,
     user: User,
