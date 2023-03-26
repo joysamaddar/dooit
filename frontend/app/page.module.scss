@@ -1,4 +1,13 @@
-.main {
-  // margin: 0 1rem;
-  // padding: 0 0.5rem;
+@import './variables';
+
+.gradient{
+  height: 250px;
+  width: 250px;
+  background: $dblue;
+  position: absolute;
+  z-index: -1;
+  border-radius: 100%;
+  filter: blur(100px);
+  top: -100%;
+  left: 90%;
 }

@@ -51,7 +51,7 @@ export default function Nav() {
     //   </div>
     // </div>
 
-    <div className="navbar  p-0 mt-6 px-16">
+    <div className="navbar  p-0 h-[10vh] px-16">
   <div className="navbar-start">
     <div className="flex-1 font-bold text-dprimary"><Link href="/">DOOIT.</Link></div>
   </div>
@@ -78,12 +78,12 @@ export default function Nav() {
           </label>
           <ul tabIndex={0} className="menu menu-compact absolute right-0 dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
             <li><Link href="login" >Login</Link></li>
-            <li><Link href="login" >Signup</Link></li>
+            <li><Link href="signup" >Signup</Link></li>
           </ul>
       </div>
         <div className="hidden lg:flex items-center gap-4">
           <Link href="login"  className="hover:bg-transparent focus:bg-transparent text-dlightblack">Login</Link>
-          <Link href="login"><button className="btn">Signup</button></Link>
+          <Link href="signup"><button className="btn">Signup</button></Link>
       </div>
   </div>
 </div>

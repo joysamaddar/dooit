@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main>
       <div className="hero flex flex-col md:flex-row items-start my-24 px-16 relative">
-        <div className="pattern"></div>
+        <div className={styles.gradient}></div>
         <h1 className="w-full md:w-2/5 text-3xl md:text-4xl lg:text-6xl font-bold">
           Level up your productivity and get your tasks done!
         </h1>

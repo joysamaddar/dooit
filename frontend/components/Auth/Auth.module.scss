@@ -1,0 +1,14 @@
+@import '../../app/variables';
+
+.gradient{
+  height: 600px;
+  width: 600px;
+  background: $ddarkblue;
+  opacity: 50%;
+  position: absolute;
+  z-index: 1;
+  border-radius: 100%;
+  filter: blur(100px);
+  top: 60%;
+  right: -60%;
+}

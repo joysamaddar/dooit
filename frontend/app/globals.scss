@@ -2,15 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-$dprimary: #1552CF;
-$dsecondary: #1D1D21;
-$ddarkblue: #0C317C;
-$dblue: #1962F9;
-$dlightblue: #F8FAFF;
-$dwhite: #FFFFFF;
-$dlightblack: #383838;
-$dgrey: #D6D6D6;
-$dblack: #101010;
+@import './variables';
 
 * {
   box-sizing: border-box;
@@ -46,18 +38,6 @@ body {
 // [data-theme="dooit-theme"] .drawer-toggle ~ .drawer-content {
 //   overflow-y: visible;
 // }
-
-.pattern{
-  height: 250px;
-  width: 250px;
-  background: $dblue;
-  position: absolute;
-  z-index: -1;
-  border-radius: 100%;
-  filter: blur(100px);
-  top: -100%;
-  left: 90%;
-}
 
 .btn-shadow{
   box-shadow: 5px 5px $dblue;
