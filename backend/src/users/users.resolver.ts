@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, Int } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UseGuards } from '@nestjs/common';
@@ -9,6 +9,11 @@ import { ChangePasswordInput } from './dto/change-password.input';
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
+
+  @Query(() => Int)
+  totalUsers() {
+    return this.usersService.totalUsers();
+  }
 
   @Query(() => [User])
   @UseGuards(JwtAuthGuard)

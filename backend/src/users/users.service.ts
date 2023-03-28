@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository, ObjectID } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
@@ -29,6 +29,10 @@ export class UsersService {
     const salt = await bcrypt.genSalt();
     user.password = await bcrypt.hash(password, salt);
     return await this.userRepository.save(user);
+  }
+
+  async totalUsers(): Promise<number> {
+    return await this.userRepository.count();
   }
 
   async users(): Promise<User[]> {

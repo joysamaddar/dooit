@@ -1,9 +1,11 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { CreateUserInput } from 'src/users/dto/create-user.input';
 import { User } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
+import { CurrentUser } from './current-user.decorator';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { TokenType } from './types/token.type';
 
 @Resolver()
@@ -23,5 +25,11 @@ export class AuthResolver {
     @Args('password') password: string,
   ) {
     return this.authService.login(context.user);
+  }
+
+  @Query(() => User)
+  @UseGuards(JwtAuthGuard)
+  validateUser(@CurrentUser() user: User) {
+    return user;
   }
 }
