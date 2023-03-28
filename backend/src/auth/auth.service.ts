@@ -37,7 +37,10 @@ export class AuthService {
     return await this.userService.createUser(createUserInput);
   }
 
-  login(user: User): TokenType {
+  login(user: User): TokenType | UnauthorizedException {
+    if (!user.username) {
+      return new UnauthorizedException('Incorrect credentials provided!');
+    }
     return {
       access_token: this.jwtService.sign({
         username: user.username,
