@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useMutation } from "@apollo/client";
 import client from "../../constants/apollo-client";
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { getUser } from "@/guards/AuthGuard";
+import authenticatedVar from "@/store/authenticated";
+import userVar from "@/store/user";
 
 export default function AuthForm({
   title,
@@ -18,11 +20,11 @@ export default function AuthForm({
 }) {
   const [mutateFn, { data, loading, error }] = useMutation(mutation, {
     client,
-    refetchQueries: "active",
   });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const path = usePathname();
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,8 +34,14 @@ export default function AuthForm({
         password,
       },
       onCompleted: (data) => {
-        if (data.login){
+        if (data.login) {
           localStorage.setItem("token", data.login.access_token);
+          authenticatedVar(true);
+          const { _id, username } = data.login.user;
+          userVar({
+            _id,
+            username,
+          });
           router.push("/");
         }
       },
@@ -71,7 +79,7 @@ export default function AuthForm({
       ) : (
         ""
       )}
-      {data ? (
+      {path=="/signup" && data && (
         <div className="absolute bottom-[25%] alert alert-success flex justify-center w-full max-w-sm">
           <div>
             <svg
@@ -90,8 +98,6 @@ export default function AuthForm({
             <span>Account created. Please login to continue!</span>
           </div>
         </div>
-      ) : (
-        ""
       )}
       <p className="lg:hidden w-full max-w-sm uppercase font-bold text-2xl text-dprimary">
         {title}

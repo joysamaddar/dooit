@@ -1,9 +1,11 @@
 "use client";
 
 import client from "../constants/apollo-client";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import authenticatedVar from "@/store/authenticated";
+import userVar from "@/store/user";
 
 interface GuardProps {
   children: JSX.Element;
@@ -26,25 +28,49 @@ const AuthGuard = ({
   unprotectedRoutes,
 }: GuardProps) => {
   const { data: user, refetch } = useQuery(getUser, { client });
+  const authenticated = useReactiveVar(authenticatedVar);
   const path = usePathname();
   const router = useRouter();
 
   useEffect(() => {
+    if (user) {
+      userVar({
+        _id: user.validateUser._id,
+        username: user.validateUser.username,
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    // If path is a protected route.
     if (!unprotectedRoutes?.includes(path)) {
       refetch();
     }
   }, [path, refetch, publicRoutes, unprotectedRoutes]);
 
+  useEffect(() => {
+    // If not authenticated and path is a protected route
+    if (
+      !authenticated &&
+      !publicRoutes?.includes(path) &&
+      !unprotectedRoutes?.includes(path)
+    ) {
+      router.push("/login");
+      client.resetStore();
+    }
+
+    // If authenticated and accessing login or signup route
+    if (authenticated && unprotectedRoutes?.includes(path)) {
+      router.push("/");
+    }
+  }, [authenticated, path, publicRoutes, unprotectedRoutes]);
+
   return (
     <>
       {publicRoutes?.includes(path) || unprotectedRoutes?.includes(path) ? (
-        publicRoutes?.includes(path) ? (
-          <>{children}</>
-        ) : (
-          <>{!user ? children : router.push("/")}</>
-        )
+        <>{children}</>
       ) : (
-        <>{user ? children : router.push("/login")}</>
+        <>{user && children}</>
       )}
     </>
   );

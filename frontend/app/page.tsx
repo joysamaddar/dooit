@@ -1,5 +1,8 @@
+"use client"
+
 import styles from "./page.module.scss";
 import TrustedByFragment from "../components/TrustedByFragment";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -15,7 +18,7 @@ export default function Home() {
             Grow your teams productivity and push work faster.
           </p>
           <div className="md:w-3/5 m-auto flex justify-start mt-4 md:mt-8">
-            <button className="btn btn-shadow flex items-center">Try it out ↗</button>
+            <Link href="/dashboard"><button className="btn btn-shadow flex items-center">Try it out ↗</button></Link>
           </div>
         </div>
       </div>
