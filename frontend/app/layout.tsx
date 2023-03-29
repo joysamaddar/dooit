@@ -1,3 +1,4 @@
+import AuthGuard from "@/guards/AuthGuard";
 import Nav from "../components/Nav";
 import "./globals.scss";
 
@@ -14,8 +15,12 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dooit-theme">
       <body className="text-dblack">
-        <Nav/>
-        {children}
+        <AuthGuard publicRoutes={["/"]} unprotectedRoutes={["/login", "/signup"]}>
+          <>
+            <Nav />
+            {children}
+          </>
+        </AuthGuard>
       </body>
     </html>
   );

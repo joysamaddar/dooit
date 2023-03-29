@@ -1,4 +1,5 @@
 import styles from "./page.module.scss";
+import TrustedByFragment from "../components/TrustedByFragment";
 
 export default function Home() {
   return (
@@ -18,7 +19,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full bg-dsecondary text-dlightblue text-md p-2 flex items-center justify-center">Trusted by over 10+ people!</div>
+      <TrustedByFragment/>
     </main>
   );
 }

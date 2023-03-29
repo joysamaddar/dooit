@@ -7,12 +7,17 @@ export default function AuthPage({
   heading,
   subheading,
   cta,
+  mutation
 }: {
   title: string;
   heading: string;
   subheading: string;
   cta: string;
+  mutation: any;
 }) {
+
+  
+
   return (
     <main>
       <div className="flex p-4 min-h-[90vh] w-full">
@@ -37,7 +42,7 @@ export default function AuthPage({
             </Link>
           </p>
         </div>
-        <AuthForm title={title} cta={cta}/>
+        <AuthForm title={title} cta={cta} mutation={mutation}/>
       </div>
     </main>
   );
