@@ -7,6 +7,8 @@ export class ChangePasswordInput {
   oldPassword: string;
 
   @Field()
-  @MinLength(8)
+  @MinLength(8, {
+    message: 'Password must be longer than or equal to 8 characters',
+  })
   newPassword: string;
 }
