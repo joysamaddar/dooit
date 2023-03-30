@@ -19,7 +19,6 @@ mutation($username: String!, $password: String!){
 
 export default function Login() {
   return (
-    <main>
       <AuthPage
         title="Login"
         heading="Welcome back!"
@@ -27,6 +26,5 @@ export default function Login() {
         cta="Do not have an account?"
         mutation={login}
       />
-    </main>
   );
 }

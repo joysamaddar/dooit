@@ -18,7 +18,9 @@ export default function RootLayout({
         <AuthGuard publicRoutes={["/"]} unprotectedRoutes={["/login", "/signup"]}>
           <>
             <Nav />
-            {children}
+            <main>
+              {children}
+            </main>
           </>
         </AuthGuard>
       </body>

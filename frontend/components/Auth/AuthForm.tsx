@@ -5,7 +5,6 @@ import { useMutation } from "@apollo/client";
 import client from "../../constants/apollo-client";
 import { FormEvent, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { getUser } from "@/guards/AuthGuard";
 import authenticatedVar from "@/store/authenticated";
 import userVar from "@/store/user";
 
@@ -36,13 +35,13 @@ export default function AuthForm({
       onCompleted: (data) => {
         if (data.login) {
           localStorage.setItem("token", data.login.access_token);
-          authenticatedVar(true);
           const { _id, username } = data.login.user;
+          authenticatedVar(true);
           userVar({
             _id,
             username,
           });
-          router.push("/");
+          router.push("/dashboard");
         }
       },
     });

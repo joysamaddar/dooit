@@ -61,7 +61,7 @@ const AuthGuard = ({
 
     // If authenticated and accessing login or signup route
     if (authenticated && unprotectedRoutes?.includes(path)) {
-      router.push("/");
+      router.push("/dashboard");
     }
   }, [authenticated, path, publicRoutes, unprotectedRoutes]);
 

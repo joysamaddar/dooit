@@ -19,7 +19,6 @@ export default function AuthPage({
   
 
   return (
-    <main>
       <div className="flex p-4 min-h-[90vh] w-full">
         <div className="hidden lg:flex lg:flex-col md:w-2/5 bg-dprimary rounded-xl p-16 relative overflow-clip">
           <div className="font-bold text-xl text-dlightblue mt-4 z-10 uppercase">
@@ -44,6 +43,5 @@ export default function AuthPage({
         </div>
         <AuthForm title={title} cta={cta} mutation={mutation}/>
       </div>
-    </main>
   );
 }

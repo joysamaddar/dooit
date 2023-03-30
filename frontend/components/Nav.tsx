@@ -22,7 +22,7 @@ export default function Nav() {
   };
 
   return (
-    <div className="navbar  p-0 h-[10vh] px-16">
+    <div className="navbar  p-0 h-[10vh] px-16 z-[999]">
       <div className="navbar-start">
         <div className="flex-1 font-bold text-dprimary">
           <Link href="/">DOOIT.</Link>
@@ -120,7 +120,7 @@ export default function Nav() {
                     <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
                   </svg>
                 </a>
-                <ul className="w-full">
+                <ul className="w-full z-[999]  dropdown-content shadow bg-base-100 rounded-box">
                   <li onClick={logoutHandler}>
                     <a>Logout</a>
                   </li>
