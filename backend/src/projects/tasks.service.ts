@@ -57,7 +57,7 @@ export class TaskService {
       return new NotFoundException();
     }
     project.tasks = project.tasks.map((task) => {
-      if (task.id === id) {
+      if (task.id == id) {
         task = { ...task, ...taskInput };
       }
       return task;
