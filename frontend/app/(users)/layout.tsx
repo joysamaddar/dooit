@@ -1,7 +1,12 @@
+"use client"
+
+import SideDrawer from "@/components/SideDrawer";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function DashboardLayout({ children } : { children: React.ReactNode}) {
+  const path = usePathname();
+  
   return (
       <div className="drawer drawer-mobile h-full min-h-[90vh]">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -35,10 +40,10 @@ export default function DashboardLayout({ children } : { children: React.ReactNo
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 bg-base-100 text-base-content">
             <li className="hover-bordered">
-              <Link href="/dashboard" className="active">Projects</Link>
+              <Link href="/dashboard" className={path=="/dashboard"?"active":""}>Projects</Link>
             </li>
             <li className={`hover-bordered`}>
-              <Link href="/dashboard/create-project">Create Project</Link>
+              <Link href="/project/create-project" className={path=="/project/create-project"?"active":""}>Create Project</Link>
             </li>
           </ul>
         </div>
