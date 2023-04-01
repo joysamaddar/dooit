@@ -1,3 +1,4 @@
+import CreateProjectForm from "../../../../components/CreateProjectForm";
 import Link from "next/link";
 
 export default function CreateProject(){
@@ -19,6 +20,7 @@ export default function CreateProject(){
     <div className="flex items-center justify-between mt-4 mb-8">
     <p className="text-2xl font-bold text-dblack">CREATE PROJECT</p>
     </div>
+    <CreateProjectForm/>
   </div>
   )
 }

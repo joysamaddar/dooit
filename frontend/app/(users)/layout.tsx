@@ -1,6 +1,5 @@
 "use client"
 
-import SideDrawer from "@/components/SideDrawer";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

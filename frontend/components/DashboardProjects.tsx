@@ -11,8 +11,8 @@ import { Doughnut } from "react-chartjs-2";
 import { StatusEnum } from "@/constants/status.enum";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const getProjectsByUser = gql`
-  query {
+export const getProjectsByUser = gql`
+  query getProjects {
     getProjects {
       _id
       name
@@ -93,7 +93,7 @@ export default function DashboardProjects() {
         in_progress,
         testing,
         completed,
-        total,
+        total
       });
     }
   }, [data]);
@@ -171,11 +171,11 @@ export default function DashboardProjects() {
           <div className="border-b-[0.05rem] border-dgrey p-4">
             <progress
               className="progress progress-success"
-              value="{
+              value={
                 progress.total == 0
                   ? 0
                   : (progress.completed / progress.total) * 100
-              }"
+              }
               max="100"
             ></progress>
           </div>
