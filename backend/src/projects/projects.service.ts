@@ -121,6 +121,11 @@ export class ProjectService {
         'Only project managers can remove users from a project.',
       );
     }
+    if (username === project.manager) {
+      throw new UnauthorizedException(
+        'Project managers cannot be removed from a project.',
+      );
+    }
     project.users = project.users.filter((data) => data !== username);
     return await this.projectRepository.save(project);
   }
