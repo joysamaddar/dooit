@@ -53,10 +53,10 @@ export default function Nav() {
                 className="menu menu-compact absolute right-0 dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <Link href="login">Login</Link>
+                  <Link href="/login">Login</Link>
                 </li>
                 <li>
-                  <Link href="signup">Signup</Link>
+                  <Link href="/signup">Signup</Link>
                 </li>
               </ul>
             </div>
@@ -67,7 +67,7 @@ export default function Nav() {
               >
                 Login
               </Link>
-              <Link href="signup">
+              <Link href="/signup">
                 <button className="btn">Signup</button>
               </Link>
             </div>

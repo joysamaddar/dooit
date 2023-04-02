@@ -12,14 +12,10 @@ export default function Dashboard() {
           <li>
             <Link href="/dashboard">Dashboard</Link>
           </li>
-          <li>
-            <Link href="/dashboard">Projects</Link>
-          </li>
         </ul>
       </div>
-      <div className="flex items-center justify-between mt-4 mb-8">
-      <p className="text-2xl font-bold text-dblack">PROJECTS</p>
-      <Link href="/project/create-project"><button className="btn">＋ CREATE NEW</button></Link>
+      <div className="flex items-center mt-4 mb-8">
+      <p className="text-2xl font-bold text-dblack">STATS</p>
       </div>
       <DashboardProjects/>
     </div>

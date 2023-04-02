@@ -181,7 +181,10 @@ export default function DashboardProjects() {
           </div>
         </div>
       </div>
-
+      <div className="flex items-center justify-between mt-4 mb-8">
+      <p className="text-2xl font-bold text-dblack">PROJECTS</p>
+      <Link href="/project/create-project"><button className="btn">＋ CREATE NEW</button></Link>
+      </div>
       <div className="overflow-x-auto w-full border-[0.05rem] border-dgrey rounded">
         <table className="table w-full rounded">
           <thead>
