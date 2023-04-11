@@ -44,7 +44,11 @@ export class TaskService {
     if (!project) {
       return new NotFoundException();
     }
-    project.tasks = project.tasks.filter((data) => data.id !== id);
+    project.tasks = project.tasks.filter((data) => data.id != id);
+    if (project.tasks.length === 0) {
+      await this.projectRepository.delete(ObjectId(project._id));
+      project.tasks = [];
+    }
     return await this.projectRepository.save(project);
   }
 
