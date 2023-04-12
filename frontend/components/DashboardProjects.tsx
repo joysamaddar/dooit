@@ -34,7 +34,6 @@ export default function DashboardProjects() {
     completed: 0,
     total: 0,
   });
-  const [chartDataNo, setChartData] = useState([0, 0, 0, 0]);
 
   const chartData = {
     labels: [
@@ -51,13 +50,13 @@ export default function DashboardProjects() {
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
           "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
+          "#36D399",
         ],
         borderColor: [
           "rgba(255, 99, 132, 1)",
           "rgba(54, 162, 235, 1)",
           "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
+          "#049A5B",
         ],
         borderWidth: 1.5,
       },
@@ -97,6 +96,10 @@ export default function DashboardProjects() {
       });
     }
   }, [data]);
+
+  // useEffect(()=>{
+  //   client.refetchQueries({ include: ["getProjects"]})
+  // }, [])
 
   const getProgress = (tasks: Task[]) => {
     const totalTasks = tasks.length;
@@ -165,7 +168,7 @@ export default function DashboardProjects() {
           <div className="border-b-[0.05rem] border-dgrey p-4 flex items-center justify-between text-dlightblack">
             <h3>Progress</h3>
             <p className="font-extrabold">
-              {(progress.completed / progress.total) * 100}%
+              {((progress.completed / progress.total) * 100).toFixed(2)}%
             </p>
           </div>
           <div className="border-b-[0.05rem] border-dgrey p-4">

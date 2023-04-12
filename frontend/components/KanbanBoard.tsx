@@ -1,68 +1,82 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DocumentNode } from "@apollo/client";
+import { DocumentNode, gql, useMutation } from "@apollo/client";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { StatusEnum } from "../constants/status.enum";
 import AddTaskForm from "./AddTaskForm";
 import TaskCard from "./TaskCard";
+import client from "@/constants/apollo-client";
+import Task from "@/constants/task.interface";
+import Project from "@/constants/project.interface";
+
+const changeTaskStatus = gql`
+  mutation ($projectId: ID!, $id: ID!, $status: String) {
+    updateTask(TaskInput: { projectId: $projectId, id: $id, status: $status }) {
+      _id
+    }
+  }
+`;
 
 type PropsType = {
-  projectData: any;
+  projectData: {getProject: Project};
   projectId: string;
   getProject: DocumentNode;
 };
 
-type TaskType = {
-  id: string;
-  name: string;
-  type: string;
-  status: StatusEnum;
-};
+
+type ColumnType = {
+  title: string;
+  items: Task[]
+}
 
 export default function KanbanBoard({
   projectData,
   projectId,
   getProject,
 }: PropsType) {
-  const [tasks, setTasks] = useState(projectData.getProject.tasks);
   const [columns, setColumns] = useState({});
+  const [changeTaskStatusFn] = useMutation(changeTaskStatus, {
+    client,
+    refetchQueries: [
+      { query: getProject, variables: { id: projectId } },
+      "getProject",
+    ],
+  });
 
   useEffect(() => {
-    setTasks(projectData.getProject.tasks);
     setColumns({
       [StatusEnum.PENDING]: {
         title: StatusEnum.PENDING,
-        items: tasks.filter(
-          (task: TaskType) => task.status == StatusEnum.PENDING
+        items: projectData.getProject.tasks.filter(
+          (task: Task) => task.status == StatusEnum.PENDING
         ),
       },
       [StatusEnum.IN_PROGRESS]: {
         title: "IN PROGRESS",
-        items: tasks.filter(
-          (task: TaskType) => task.status == StatusEnum.IN_PROGRESS
+        items: projectData.getProject.tasks.filter(
+          (task: Task) => task.status == StatusEnum.IN_PROGRESS
         ),
       },
       [StatusEnum.TESTING]: {
         title: StatusEnum.TESTING,
-        items: tasks.filter(
-          (task: TaskType) => task.status == StatusEnum.TESTING
+        items: projectData.getProject.tasks.filter(
+          (task: Task) => task.status == StatusEnum.TESTING
         ),
       },
       [StatusEnum.COMPLETED]: {
         title: StatusEnum.COMPLETED,
-        items: tasks.filter(
-          (task: TaskType) => task.status == StatusEnum.COMPLETED
+        items: projectData.getProject.tasks.filter(
+          (task: Task) => task.status == StatusEnum.COMPLETED
         ),
       },
     });
   }, [projectData]);
 
+
   const onDragEnd = (result: any, columns: any, setColumns: any) => {
     if (!result.destination) return;
-    const { source, destination } = result;
-    console.log(source);
-    console.log(destination)
+    const { source, destination, draggableId } = result;
     if (source.droppableId !== destination.droppableId) {
       const sourceColumn = columns[source.droppableId];
       const destColumn = columns[destination.droppableId];
@@ -81,18 +95,11 @@ export default function KanbanBoard({
           items: destItems,
         },
       });
-    } else {
-      const column = columns[source.droppableId];
-      const copiedItems = [...column.items];
-      const [removed] = copiedItems.splice(source.index, 1);
-      copiedItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...column,
-          items: copiedItems,
-        },
-      });
+      changeTaskStatusFn({variables: {
+        projectId, 
+        id: draggableId,
+        status: destination.droppableId
+      }})
     }
   };
 
@@ -100,33 +107,44 @@ export default function KanbanBoard({
     <div className="w-full bg-dwhite flex items-center justify-evenly px-4 py-8 my-8 rounded border-[0.05rem] border-dgrey">
       <div className="w-full">
         <AddTaskForm projectId={projectId} getProject={getProject} />
-          <DragDropContext
-            onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
-          >
-            <div className="flex mt-8">
-              <div className="flex w-full min-h-[50vh] p-5 bg-dlightblue rounded"> 
-                {Object.entries(columns).map(([columnId, column], _index) => {
-                  return (
-                    <Droppable key={columnId} droppableId={columnId}>
-                      {(provided, _snapshot) => (
-                        <div className="min-h-[100px] flex flex-col w-full max-w-1/4"
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                        >
-                          <div className="bg-dwhite font-semibold text-dprimary p-2 flex items-center justify-center">{(column as any).title}</div>
-                          {(column as any).items.map((item: any, index: number) => (
-                            <TaskCard key={item} item={item} index={index}/>
-                          ))}
-                          {provided.placeholder}
+        <DragDropContext
+          onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+        >
+          <div className="flex mt-8">
+            <div className="flex w-full min-h-[50vh] p-5 bg-dlightblue rounded">
+              {Object.entries(columns).map(([columnId, column], index) => {
+                return (
+                  <Droppable key={index} droppableId={columnId}>
+                    {(provided, _snapshot) => (
+                      <div
+                        className="min-h-[100px] flex flex-col w-full max-w-1/4"
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                      >
+                        <div className="bg-dwhite font-semibold text-dprimary p-2 flex items-center justify-center">
+                          {(column as ColumnType).title}
                         </div>
-                      )}
-                    </Droppable>
-                  );
-                })}
-              </div>
+                        {(column as ColumnType).items.map(
+                          (item: Task, index: number) => (
+                            <TaskCard
+                              key={index}
+                              item={item}
+                              index={index}
+                              projectId={projectId}
+                              getProject={getProject}
+                            />
+                          )
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                );
+              })}
             </div>
-          </DragDropContext>
-        </div>
+          </div>
+        </DragDropContext>
       </div>
+    </div>
   );
 }

@@ -59,6 +59,10 @@ export default function ProjectPage({ params: { projectId } }: ParamType) {
     }
   }, [data]);
 
+  useEffect(()=>{
+    client.refetchQueries({ include: ["getProject"]})
+  }, [projectId])
+
   if (error) {
     throw new Error("Error connecting to the server. Please try again later.");
   }

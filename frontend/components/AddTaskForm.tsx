@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { gql, useMutation, DocumentNode } from "@apollo/client";
 import client from "@/constants/apollo-client";
+import Project from "@/constants/project.interface";
 
 const createTask = gql`
   mutation ($projectId: ID!, $name: String!, $type: String!) {
@@ -10,6 +11,12 @@ const createTask = gql`
       CreateTaskInput: { projectId: $projectId, name: $name, type: $type }
     ) {
       _id
+      tasks {
+        id
+        name
+        type
+        status
+      }
     }
   }
 `;
@@ -19,14 +26,16 @@ type PropsType = {
   getProject: DocumentNode;
 };
 
-export default function AddTaskForm({
-  projectId,
-  getProject,
-}: PropsType) {
+export default function AddTaskForm({ projectId, getProject }: PropsType) {
   const [taskName, setTaskName] = useState("");
   const [taskType, setTaskType] = useState("");
+  const [error, setError] = useState("");
   const [addTaskFn] = useMutation(createTask, {
     client,
+    refetchQueries: [
+      { query: getProject, variables: { id: projectId } },
+      "getProject",
+    ],
   });
 
   const addTaskHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -37,35 +46,47 @@ export default function AddTaskForm({
         name: taskName,
         type: taskType,
       },
-      refetchQueries: [
-        { query: getProject, variables: { id: projectId } },
-        "getProject",
-      ],
+      onError: (error) => {
+        setError(
+          (
+            error.graphQLErrors[0].extensions.originalError as {
+              error: string;
+              message: string[];
+              statusCode: number;
+            }
+          ).message[0]
+        );
+      },
     });
     setTaskName("");
     setTaskType("");
   };
 
   return (
-    <form
-      className="flex items-center justify-center"
-      onSubmit={addTaskHandler}
-    >
-      <input
-        type="text"
-        placeholder="Task name"
-        className="input input-bordered w-full max-w-xs rounded-none"
-        value={taskName}
-        onChange={(e) => setTaskName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Task type"
-        className="input input-bordered w-full max-w-xs rounded-none"
-        value={taskType}
-        onChange={(e) => setTaskType(e.target.value)}
-      />
-      <button className="btn">＋ Add Task</button>
-    </form>
+    <>
+      <form
+        className="flex items-center justify-center"
+        onSubmit={addTaskHandler}
+      >
+        <input
+          type="text"
+          placeholder="Task name"
+          className="input input-bordered w-full max-w-xs rounded-none"
+          value={taskName}
+          onChange={(e) => setTaskName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Task type"
+          className="input input-bordered w-full max-w-xs rounded-none"
+          value={taskType}
+          onChange={(e) => setTaskType(e.target.value)}
+        />
+        <button className="btn">＋ Add Task</button>
+      </form>
+      {error && (
+        <div className="w-full text-center mt-2 text-error">{error}</div>
+      )}
+    </>
   );
 }
