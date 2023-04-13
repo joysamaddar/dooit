@@ -61,7 +61,7 @@ export class UsersService {
         _id: ObjectId(user._id),
       },
     });
-    if (bcrypt.compare(oldPassword, result.password)) {
+    if (await bcrypt.compare(oldPassword, result.password)) {
       const salt = await bcrypt.genSalt();
       result.password = await bcrypt.hash(newPassword, salt);
       return await this.userRepository.save(result);
