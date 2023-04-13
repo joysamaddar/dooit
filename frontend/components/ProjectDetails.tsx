@@ -4,6 +4,8 @@ import { gql, useMutation, DocumentNode } from "@apollo/client";
 import EdiText from "react-editext";
 import client from "@/constants/apollo-client";
 import { useState } from "react";
+import { getProjectsByUser } from "./DashboardProjects";
+import { useRouter } from "next/navigation";
 
 const updateProject = gql`
   mutation ($id: ID!, $name: String, $description: String, $tags: [String!]) {
@@ -15,6 +17,14 @@ const updateProject = gql`
         tags: $tags
       }
     ) {
+      _id
+    }
+  }
+`;
+
+const deleteProject = gql`
+  mutation ($id: String!) {
+    deleteProject(id: $id) {
       _id
     }
   }
@@ -71,10 +81,17 @@ export default function ProjectDetails({
     client,
     refetchQueries: [{ query: getProject }, "getProject"],
   });
+  const [deleteProjectFn] = useMutation(deleteProject, {
+    client,
+    refetchQueries: [{ query: getProjectsByUser }, "getProjects"],
+  });
+
   const [toggleTagsInput, setToggleTagsInput] = useState(false);
   const [toggleUsersInput, setToggleUsersInput] = useState(false);
   const [tagsVal, setTagsVal] = useState("");
   const [usersVal, setUsersVal] = useState("");
+
+  const router = useRouter();
 
   const updateNameHandler = (val: string) => {
     const data = {
@@ -147,32 +164,73 @@ export default function ProjectDetails({
     });
   };
 
+  const deleteProjectHandler = () => {
+    deleteProjectFn({
+      variables: {
+        id: projectId,
+      },
+      onCompleted: () => {
+        router.replace("/dashboard");
+      },
+    });
+  };
+
   return (
     <>
       <div className="flex items-center justify-between mt-4 mb-8 text-2xl font-bold text-dblack">
         {user.username == data.getProject.manager ? (
-          <EdiText
-            submitOnEnter
-            editOnViewClick={true}
-            cancelOnEscape
-            cancelOnUnfocus
-            showButtonsOnHover
-            saveButtonContent="Save"
-            saveButtonClassName="btn btn-success mx-2"
-            cancelButtonContent="Cancel"
-            cancelButtonClassName="btn btn-error"
-            editButtonContent="Edit"
-            editButtonClassName="ml-4 btn btn-xs"
-            hideIcons
-            inputProps={{
-              className: "input input-bordered input-md rounded-none",
-            }}
-            validationMessage="Project name needs to be atleast 3 characters."
-            validation={(val) => val.length >= 3}
-            type="text"
-            value={projectData.name}
-            onSave={updateNameHandler}
-          />
+          <>
+            <EdiText
+              submitOnEnter
+              editOnViewClick={true}
+              cancelOnEscape
+              cancelOnUnfocus
+              showButtonsOnHover
+              saveButtonContent="Save"
+              saveButtonClassName="btn btn-success mx-2"
+              cancelButtonContent="Cancel"
+              cancelButtonClassName="btn btn-error"
+              editButtonContent="Edit"
+              editButtonClassName="ml-4 btn btn-xs"
+              hideIcons
+              inputProps={{
+                className: "input input-bordered input-md rounded-none",
+              }}
+              validationMessage="Project name needs to be atleast 3 characters."
+              validation={(val) => val.length >= 3}
+              type="text"
+              value={projectData.name}
+              onSave={updateNameHandler}
+            />
+            <button
+              className="btn btn-error flex items-center justify-center"
+              onClick={deleteProjectHandler}
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18 6L6 18"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M6 6L18 18"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+              DELETE
+            </button>
+          </>
         ) : (
           <p>{projectData.name}</p>
         )}

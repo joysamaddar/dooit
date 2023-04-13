@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMutation } from "@apollo/client";
 import client from "../../constants/apollo-client";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import authenticatedVar from "@/store/authenticated";
 import userVar from "@/store/user";
@@ -20,13 +20,26 @@ export default function AuthForm({
   const [mutateFn, { data, loading, error }] = useMutation(mutation, {
     client,
   });
+  const [genError, setGenError] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
   const router = useRouter();
   const path = usePathname();
 
+  useEffect(()=>{
+    if(error){
+      setGenError((error.graphQLErrors[0].extensions.originalError as any).message)
+    }
+  }, [error])
+
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (path == "/signup" && password != rePassword) {
+      setGenError("Passwords do not match. Please try again.");
+      return;
+    }
+    setGenError("");
     mutateFn({
       variables: {
         username,
@@ -47,6 +60,7 @@ export default function AuthForm({
     });
     setUsername("");
     setPassword("");
+    setRePassword("");
   };
 
   return (
@@ -54,32 +68,8 @@ export default function AuthForm({
       onSubmit={(e) => submitHandler(e)}
       className="relative w-full lg:w-3/5 flex flex-col justify-center items-center gap-6 mt-[-5vh]"
     >
-      {error ? (
-        <div className="absolute bottom-[25%] alert alert-error flex justify-center w-full max-w-sm">
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current flex-shrink-0 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>
-              {(error.graphQLErrors[0].extensions.originalError as any).message}
-            </span>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
-      {path=="/signup" && data && (
-        <div className="absolute bottom-[25%] alert alert-success flex justify-center w-full max-w-sm">
+      {path == "/signup" && data && (
+        <div className="absolute top-[15%] alert alert-success flex justify-center w-full max-w-sm">
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -97,6 +87,30 @@ export default function AuthForm({
             <span>Account created. Please login to continue!</span>
           </div>
         </div>
+      )}
+      {genError ? (
+        <div className="absolute top-[15%] alert alert-error flex justify-center w-full max-w-sm">
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current flex-shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>
+              {genError}
+            </span>
+          </div>
+        </div>
+      ) : (
+        ""
       )}
       <p className="lg:hidden w-full max-w-sm uppercase font-bold text-2xl text-dprimary">
         {title}
@@ -117,6 +131,16 @@ export default function AuthForm({
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      {path == "/signup" && (
+        <input
+          type="password"
+          placeholder="Re-enter password"
+          className="input input-bordered w-full max-w-sm"
+          required
+          value={rePassword}
+          onChange={(e) => setRePassword(e.target.value)}
+        />
+      )}
       <button
         type="submit"
         className={`btn btn-primary w-full max-w-sm uppercase ${
