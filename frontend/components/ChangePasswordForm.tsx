@@ -1,9 +1,9 @@
 "use client";
 
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { FormEvent, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import client from "../constants/apollo-client";
-import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import authenticatedVar from "@/store/authenticated";
 
 const createProject = gql`
@@ -22,21 +22,34 @@ export default function ChangePasswordForm() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [alert, setAlert] = useState({
+    type: "",
+    message: ""
+  });
 
   const submitFunction = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(newPassword!=confirmNewPassword){
-      console.log("Passwords do not match");
+      setAlert({
+        type: "error",
+        message: "Passwords do not match."
+      });
       return;
     }
     mutateFn({variables: {
       oldPassword,
       newPassword
     }, onCompleted: ()=>{
-      console.log("Password is changed!")
+      setAlert({
+        type: "success",
+        message: "Password is changed!"
+      });
     },
     onError: (error)=>{
-      console.log(error.graphQLErrors[0].message);
+      setAlert({
+        type: "error",
+        message: error.graphQLErrors[0].message
+      });
       authenticatedVar(true);
       return;
     }
@@ -48,7 +61,7 @@ export default function ChangePasswordForm() {
 
   return (
     <div>
-      <div className="w-full bg-dwhite flex items-center justify-center p-4 py-16 my-8 rounded border-[0.05rem] border-dgrey">
+      <div className="w-full bg-dwhite flex items-center justify-center p-4 py-16 my-8 rounded border-[0.05rem] border-dgrey flex-col gap-8">
         <form
           className="w-full flex flex-col gap-4 items-center justify-center"
           onSubmit={submitFunction}
@@ -94,6 +107,43 @@ export default function ChangePasswordForm() {
           </div>
           <button className="btn btn-primary w-full max-w-md">UPDATE</button>
         </form>
+        {alert.type && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.75 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.25 }}
+          className={`alert ${alert.type=='success'?'alert-success':'alert-error'} flex justify-center w-full max-w-md`}
+        >
+          <div>
+            {alert.type=="success"? <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current flex-shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>:<svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current flex-shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>}
+            <span>{alert.message}</span>
+          </div>
+        </motion.div>
+      )}
       </div>
     </div>
   );

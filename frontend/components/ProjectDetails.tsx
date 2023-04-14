@@ -90,6 +90,7 @@ export default function ProjectDetails({
   const [toggleUsersInput, setToggleUsersInput] = useState(false);
   const [tagsVal, setTagsVal] = useState("");
   const [usersVal, setUsersVal] = useState("");
+  const [showModal, setShowModal] = useState(true);
 
   const router = useRouter();
 
@@ -177,6 +178,20 @@ export default function ProjectDetails({
 
   return (
     <>
+    {showModal && 
+    <>
+      <input type="checkbox" id="my-modal-6" className="modal-toggle" />
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box relative">
+        <label htmlFor="my-modal-6" className="btn btn-sm btn-circle absolute right-4 top-4">✕</label>
+          <h3 className="font-bold text-lg">DELETE THE PROJECT?</h3>
+          <p className="py-4">Please note this will remove all the project data. Once deleted, data will NOT be recoverable.</p>
+          <div className="modal-action">
+            <label htmlFor="my-modal-6" className="btn btn-error" onClick={deleteProjectHandler}>DELETE</label>
+          </div>
+        </div>
+      </div>
+      </>}
       <div className="flex items-center justify-between mt-4 mb-8 text-2xl font-bold text-dblack">
         {user.username == data.getProject.manager ? (
           <>
@@ -202,11 +217,7 @@ export default function ProjectDetails({
               value={projectData.name}
               onSave={updateNameHandler}
             />
-            <button
-              className="btn btn-error flex items-center justify-center"
-              onClick={deleteProjectHandler}
-            >
-              <svg
+            <label htmlFor="my-modal-6" className="btn btn-error"> <svg
                 width="15"
                 height="15"
                 viewBox="0 0 24 24"
@@ -227,9 +238,7 @@ export default function ProjectDetails({
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 ></path>
-              </svg>
-              DELETE
-            </button>
+              </svg>DELETE</label>
           </>
         ) : (
           <p>{projectData.name}</p>

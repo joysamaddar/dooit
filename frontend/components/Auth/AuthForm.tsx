@@ -7,6 +7,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import authenticatedVar from "@/store/authenticated";
 import userVar from "@/store/user";
+import { motion } from "framer-motion";
 
 export default function AuthForm({
   title,
@@ -27,11 +28,13 @@ export default function AuthForm({
   const router = useRouter();
   const path = usePathname();
 
-  useEffect(()=>{
-    if(error){
-      setGenError((error.graphQLErrors[0].extensions.originalError as any).message)
+  useEffect(() => {
+    if (error) {
+      setGenError(
+        (error.graphQLErrors[0].extensions.originalError as any).message
+      );
     }
-  }, [error])
+  }, [error]);
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,7 +72,12 @@ export default function AuthForm({
       className="relative w-full lg:w-3/5 flex flex-col justify-center items-center gap-6 mt-[-5vh]"
     >
       {path == "/signup" && data && (
-        <div className="absolute top-[15%] alert alert-success flex justify-center w-full max-w-sm">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.75 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.25 }}
+          className="absolute top-[15%] alert alert-success flex justify-center w-full max-w-sm"
+        >
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -86,10 +94,13 @@ export default function AuthForm({
             </svg>
             <span>Account created. Please login to continue!</span>
           </div>
-        </div>
+        </motion.div>
       )}
       {genError ? (
-        <div className="absolute top-[15%] alert alert-error flex justify-center w-full max-w-sm">
+        <motion.div
+        initial={{ opacity: 0, scale: 0.75 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.25 }} className="absolute top-[15%] alert alert-error flex justify-center w-full max-w-sm">
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -104,11 +115,9 @@ export default function AuthForm({
                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>
-              {genError}
-            </span>
+            <span>{genError}</span>
           </div>
-        </div>
+        </motion.div>
       ) : (
         ""
       )}

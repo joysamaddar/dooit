@@ -130,7 +130,7 @@ export default function DashboardProjects() {
   };
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col mb-12">
       <div className="w-full bg-dwhite flex flex-col lg:flex-row items-center justify-evenly p-4 my-8 rounded border-[0.05rem] border-dgrey">
         <div className="w-full max-w-[25rem] h-auto bg-dwhite relative">
           <Doughnut
