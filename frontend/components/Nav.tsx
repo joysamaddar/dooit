@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useReactiveVar } from "@apollo/client";
 import userVar from "@/store/user";
-import { useRouter } from "next/navigation";
 import client from "@/constants/apollo-client";
 import authenticatedVar from "@/store/authenticated";
+import { useRouter } from "next/navigation";
 
 export default function Nav() {
   const user = useReactiveVar(userVar);
@@ -22,7 +22,7 @@ export default function Nav() {
   };
 
   return (
-    <div className="navbar  p-0 h-[10vh] px-16 z-[999]">
+    <div className="navbar  p-0 h-[10vh] px-8 lg:px-16 z-[999]">
       <div className="navbar-start">
         <div className="flex-1 font-bold text-dprimary">
           <Link href="/">DOOIT.</Link>

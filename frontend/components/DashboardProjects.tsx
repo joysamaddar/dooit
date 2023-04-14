@@ -45,7 +45,12 @@ export default function DashboardProjects() {
     datasets: [
       {
         label: "# of Tasks",
-        data: [progress.pending, progress.in_progress, progress.testing, progress.completed],
+        data: [
+          progress.pending,
+          progress.in_progress,
+          progress.testing,
+          progress.completed,
+        ],
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
@@ -71,20 +76,20 @@ export default function DashboardProjects() {
       let testing = 0;
       let completed = 0;
       data.getProjects.forEach((project: Project) => {
-        project.tasks.forEach((task)=>{
-          if(task.status == StatusEnum.PENDING){
+        project.tasks.forEach((task) => {
+          if (task.status == StatusEnum.PENDING) {
             pending++;
           }
-          if(task.status == StatusEnum.IN_PROGRESS){
+          if (task.status == StatusEnum.IN_PROGRESS) {
             in_progress++;
           }
-          if(task.status == StatusEnum.TESTING){
+          if (task.status == StatusEnum.TESTING) {
             testing++;
           }
-          if(task.status == StatusEnum.COMPLETED){
+          if (task.status == StatusEnum.COMPLETED) {
             completed++;
           }
-        })
+        });
         total = total + project.tasks.length;
       });
       setProgress({
@@ -92,14 +97,10 @@ export default function DashboardProjects() {
         in_progress,
         testing,
         completed,
-        total
+        total,
       });
     }
   }, [data]);
-
-  // useEffect(()=>{
-  //   client.refetchQueries({ include: ["getProjects"]})
-  // }, [])
 
   const getProgress = (tasks: Task[]) => {
     const totalTasks = tasks.length;
@@ -129,9 +130,9 @@ export default function DashboardProjects() {
   };
 
   return (
-    <div>
-      <div className="w-full bg-dwhite flex items-center justify-evenly p-4 my-8 rounded border-[0.05rem] border-dgrey">
-        <div className="w-[25rem] h-auto bg-dwhite relative">
+    <div className="w-full flex flex-col">
+      <div className="w-full bg-dwhite flex flex-col lg:flex-row items-center justify-evenly p-4 my-8 rounded border-[0.05rem] border-dgrey">
+        <div className="w-full max-w-[25rem] h-auto bg-dwhite relative">
           <Doughnut
             data={chartData}
             options={{
@@ -156,7 +157,7 @@ export default function DashboardProjects() {
             }}
           />
         </div>
-        <div className="w-[25rem] flex flex-col h-auto rounded border-[0.05rem] border-dgrey">
+        <div className="w-full max-w-[25rem] flex flex-col h-auto rounded border-[0.05rem] border-dgrey">
           <div className="border-b-[0.05rem] border-dgrey p-4 flex items-center justify-between text-dlightblack">
             <h3>Total projects</h3>
             <p className="font-extrabold">{data && data.getProjects.length}</p>
@@ -185,11 +186,13 @@ export default function DashboardProjects() {
         </div>
       </div>
       <div className="flex items-center justify-between mt-4 mb-8">
-      <p className="text-2xl font-bold text-dblack">PROJECTS</p>
-      <Link href="/project/create-project"><button className="btn">＋ CREATE NEW</button></Link>
+        <p className="text-2xl font-bold text-dblack">PROJECTS</p>
+        <Link href="/project/create-project">
+          <button className="btn">＋ CREATE NEW</button>
+        </Link>
       </div>
       <div className="overflow-x-auto w-full border-[0.05rem] border-dgrey rounded">
-        <table className="table w-full rounded">
+        <table className="table rounded w-full">
           <thead>
             <tr>
               <th className="bg-dprimary text-dlightblue">Name</th>
@@ -203,13 +206,13 @@ export default function DashboardProjects() {
               data.getProjects.map((project: Project) => (
                 <tr key={project._id}>
                   <td className="font-bold">{project.name}</td>
-                  <td>{project.description}</td>
+                  <td className="max-w-[12rem]"><p className="w-full break-words whitespace-normal">{project.description}</p></td>
                   <td>{getProgress(project.tasks)}</td>
-                  <th className="flex items-center justify-center">
-                    <Link href={`/project/${project._id}`}>
+                  <td>
+                    <Link href={`/project/${project._id}`} className="flex items-center justify-center">
                       <button className="btn btn-xs">DETAILS</button>
                     </Link>
-                  </th>
+                  </td>
                 </tr>
               ))}
           </tbody>

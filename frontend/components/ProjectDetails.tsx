@@ -236,8 +236,8 @@ export default function ProjectDetails({
         )}
       </div>
 
-      <div className="w-full flex mb-2">
-        <p className="w-full max-w-[10rem] text-dlightblack">Description:</p>
+      <div className="flex mb-6 sm:mb-2 h-auto flex-col sm:flex-row gap-2 sm:gap-0">
+        <p className="w-full max-w-[10rem] text-dlightblack font-semibold">Description:</p>
         {user.username == data.getProject.manager ? (
           <EdiText
             submitOnEnter
@@ -258,27 +258,28 @@ export default function ProjectDetails({
             validationMessage="Project description needs to be atleast 3 characters."
             validation={(val) => val.length >= 3}
             type="text"
+            viewContainerClassName="max-w-[15rem] lg:max-w-[25rem] break-words whitespace-normal"
             value={projectData.description}
             onSave={updateDescriptionHandler}
           />
         ) : (
-          <p>{data.getProject.description}</p>
+          <p className="max-w-[15rem] lg:max-w-[25rem] break-words whitespace-normal">{data.getProject.description}</p>
         )}
       </div>
 
       <div className="w-full flex mb-2">
-        <p className="w-full max-w-[10rem] text-dlightblack">
+        <p className="w-full max-w-[10rem] text-dlightblack font-semibold">
           Project manager:
         </p>
         <p>{data.getProject.manager}</p>
       </div>
 
       <div className="w-full flex mb-2">
-        <p className="w-full max-w-[10rem] text-dlightblack">Assignees:</p>
-        <div className="flex gap-4 items-center">
+        <p className="w-full max-w-[10rem] text-dlightblack font-semibold">Assignees:</p>
+        <div className="flex gap-4 items-center overflow-x-auto">
           {data.getProject.users.map((u: string, i: number) => {
             return (
-              <div key={i} className="badge badge-lg rounded">
+              <div key={i} className="badge badge-lg rounded min-w-fit">
                 {u}
                 {user.username == data.getProject.manager &&
                   u != data.getProject.manager && (
@@ -335,11 +336,11 @@ export default function ProjectDetails({
       </div>
 
       <div className="w-full flex mb-2">
-        <p className="w-full max-w-[10rem] text-dlightblack">Tags:</p>
-        <div className="flex gap-4 items-center">
+        <p className="w-full max-w-[10rem] text-dlightblack font-semibold">Tags:</p>
+        <div className="flex gap-4 items-center overflow-x-auto">
           {data.getProject.tags.map((tag: string, i: number) => {
             return (
-              <div key={i} className="badge badge-primary badge-lg rounded">
+              <div key={i} className="badge badge-primary badge-lg rounded min-w-fit">
                 {tag}
                 {user.username == data.getProject.manager && (
                   <p

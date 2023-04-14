@@ -104,20 +104,20 @@ export default function KanbanBoard({
   };
 
   return (
-    <div className="w-full bg-dwhite flex items-center justify-evenly px-4 py-8 my-8 rounded border-[0.05rem] border-dgrey">
-      <div className="w-full">
-        <AddTaskForm projectId={projectId} getProject={getProject} />
+    <div className="w-full bg-dwhite flex flex-col items-center justify-evenly px-4 py-8 my-8 rounded border-[0.05rem] border-dgrey">
+       <AddTaskForm projectId={projectId} getProject={getProject} />
+      <div className="overflow-x-auto w-full">
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
         >
           <div className="flex mt-8">
-            <div className="flex w-full min-h-[50vh] p-5 bg-dlightblue rounded">
+            <div className="flex min-h-[50vh] p-5 bg-dlightblue rounded m-auto">
               {Object.entries(columns).map(([columnId, column], index) => {
                 return (
                   <Droppable key={index} droppableId={columnId}>
                     {(provided, _snapshot) => (
                       <div
-                        className="min-h-[100px] flex flex-col w-full max-w-1/4"
+                        className="min-h-[100px] flex flex-col min-w-[14rem] w-1/4 bg-dlightblue"
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                       >

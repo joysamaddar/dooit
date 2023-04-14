@@ -65,7 +65,7 @@ export default function AddTaskForm({ projectId, getProject }: PropsType) {
   return (
     <>
       <form
-        className="flex items-center justify-center"
+        className="flex flex-col lg:flex-row gap-4 lg:gap-0 items-center justify-center"
         onSubmit={addTaskHandler}
       >
         <input
@@ -82,7 +82,7 @@ export default function AddTaskForm({ projectId, getProject }: PropsType) {
           value={taskType}
           onChange={(e) => setTaskType(e.target.value)}
         />
-        <button className="btn">＋ Add Task</button>
+        <button className="btn w-full max-w-xs lg:w-auto">＋ Add Task</button>
       </form>
       {error && (
         <div className="w-full text-center mt-2 text-error">{error}</div>

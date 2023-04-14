@@ -10,10 +10,10 @@ export default function DashboardLayout({ children } : { children: React.ReactNo
       <div className="drawer drawer-mobile h-full min-h-[90vh]">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex justify-center">
-          <div className="w-12 flex items-start justify-center lg:hidden">
+          <div className="w-[10vw] flex flex-1 items-start justify-center lg:hidden">
             <label
               htmlFor="my-drawer-2"
-              className=" drawer-button lg:hidden p-4"
+              className="drawer-button lg:hidden p-4"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@ export default function DashboardLayout({ children } : { children: React.ReactNo
               </svg>
             </label>
           </div>
-          <div className="flex-1 bg-dlightblue rounded-tl-3xl p-4">
+          <div className="w-[90vw] bg-dlightblue rounded-tl-3xl p-4">
             {children}
           </div>
         </div>
@@ -43,6 +43,9 @@ export default function DashboardLayout({ children } : { children: React.ReactNo
             </li>
             <li className={`hover-bordered`}>
               <Link href="/project/create-project" className={path=="/project/create-project"?"active":""}>Create Project</Link>
+            </li>
+            <li className={`hover-bordered`}>
+              <Link href="/change-password" className={path=="/change-password"?"active":""}>Change Password</Link>
             </li>
           </ul>
         </div>
