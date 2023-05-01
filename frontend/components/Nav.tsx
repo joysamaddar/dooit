@@ -22,7 +22,7 @@ export default function Nav() {
   };
 
   return (
-    <div className="navbar  p-0 h-[10vh] px-8 lg:px-16 z-[999]">
+    <div className="navbar  p-0 h-[10vh] px-8 lg:px-28 z-[999]">
       <div className="navbar-start">
         <div className="flex-1 font-bold text-dprimary">
           <Link href="/">DOOIT.</Link>

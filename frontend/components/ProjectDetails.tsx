@@ -181,7 +181,7 @@ export default function ProjectDetails({
     {showModal && 
     <>
       <input type="checkbox" id="my-modal-6" className="modal-toggle" />
-      <div className="modal modal-bottom sm:modal-middle">
+      <div className="modal modal-bottom sm:modal-middle bg-transparent">
         <div className="modal-box relative">
         <label htmlFor="my-modal-6" className="btn btn-sm btn-circle absolute right-4 top-4">✕</label>
           <h3 className="font-bold text-lg">DELETE THE PROJECT?</h3>

@@ -7,7 +7,7 @@ export default function DashboardLayout({ children } : { children: React.ReactNo
   const path = usePathname();
   
   return (
-      <div className="drawer drawer-mobile h-full min-h-[90vh]">
+      <div className="drawer drawer-mobile h-full min-h-[84vh]">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex justify-center">
           <div className="w-[10vw] flex flex-1 items-start justify-center lg:hidden">
@@ -35,9 +35,9 @@ export default function DashboardLayout({ children } : { children: React.ReactNo
             {children}
           </div>
         </div>
-        <div className="drawer-side">
+        <div className="drawer-side !max-h-full !min-w-full">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80  text-base-content">
+          <ul className="menu p-4 w-80 text-base-content bg-dwhite">
             <li className="hover-bordered">
               <Link href="/dashboard" className={path=="/dashboard"?"active":""}>Dashboard</Link>
             </li>

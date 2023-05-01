@@ -29,3 +29,20 @@ body {
 .btn-shadow:hover{
   box-shadow: 0px 0px $dgrey;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dprimary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--darkblue);
+}

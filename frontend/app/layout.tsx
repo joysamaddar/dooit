@@ -1,6 +1,7 @@
 import AuthGuard from "@/guards/AuthGuard";
 import Nav from "../components/Nav";
 import "./globals.scss";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Dooit",
@@ -23,6 +24,7 @@ export default function RootLayout({
             </main>
           </>
         </AuthGuard>
+        <Footer/>
       </body>
     </html>
   );

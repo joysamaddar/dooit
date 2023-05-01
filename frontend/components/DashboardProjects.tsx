@@ -188,16 +188,16 @@ export default function DashboardProjects() {
       <div className="flex items-center justify-between mt-4 mb-8">
         <p className="text-2xl font-bold text-dblack">PROJECTS</p>
         <Link href="/project/create-project">
-          <button className="btn">＋ CREATE NEW</button>
+          <button className="btn sm:btn-xl btn-sm">＋ CREATE NEW</button>
         </Link>
       </div>
       <div className="overflow-x-auto w-full border-[0.05rem] border-dgrey rounded">
         <table className="table rounded w-full">
           <thead>
             <tr>
-              <th className="bg-dprimary text-dlightblue">Name</th>
-              <th className="bg-dprimary text-dlightblue">Description</th>
-              <th className="bg-dprimary text-dlightblue">Progress</th>
+              <th className="bg-dprimary text-dlightblue min-w-[150px] !relative">Name</th>
+              <th className="bg-dprimary text-dlightblue min-w-[200px]">Description</th>
+              <th className="bg-dprimary text-dlightblue min-w-[200px]">Progress</th>
               <th className="bg-dprimary text-dlightblue"></th>
             </tr>
           </thead>

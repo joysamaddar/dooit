@@ -19,7 +19,7 @@ export default function AuthPage({
   
 
   return (
-      <div className="flex p-4 min-h-[90vh] w-full">
+      <div className="flex p-4 pb-8 min-h-[84vh] w-full">
         <div className="hidden lg:flex lg:flex-col md:w-2/5 bg-dprimary rounded-xl p-16 relative overflow-clip">
           <div className="font-bold text-xl text-dlightblue mt-4 z-10 uppercase">
             <Link href="/">{title}</Link>

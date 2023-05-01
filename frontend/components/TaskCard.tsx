@@ -61,7 +61,6 @@ export default function TaskCard({
               initial={{ opacity: 0, scale: 0.75 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.25 }}
-
               className="flex flex-col justify-center items-start p-4 min-h-[90px] bg-dwhite mt-5 mx-2 border-2 border-dgrey rounded"
             >
               <div className="flex w-full items-center justify-between">

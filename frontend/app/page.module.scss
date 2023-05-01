@@ -7,7 +7,21 @@
   position: absolute;
   z-index: -1;
   border-radius: 100%;
-  filter: blur(100px);
-  top: -100%;
+  filter: blur(150px);
+  opacity: 70%;
+  top: -30%;
   left: 90%;
+}
+
+.gradient2{
+  height: 250px;
+  width: 250px;
+  background: $dlightblue;
+  position: absolute;
+  z-index: 0;
+  border-radius: 100%;
+  filter: blur(120px);
+  top: 60%;
+  opacity: 50%;
+  left: -5%;
 }
