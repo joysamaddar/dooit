@@ -111,7 +111,7 @@ export default function KanbanBoard({
           onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
         >
           <div className="flex mt-8">
-            <div className="flex min-h-[50vh] p-5 bg-dlightblue rounded m-auto">
+            <div className="flex min-h-[50vh] p-5 bg-dlightblue rounded m-auto w-full">
               {Object.entries(columns).map(([columnId, column], index) => {
                 return (
                   <Droppable key={index} droppableId={columnId}>

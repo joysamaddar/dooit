@@ -85,7 +85,7 @@ export default function TaskCard({
                   </svg>
                 </button>
               </div>
-              <div className="flex justify-between items-center w-full text-sm font-light text-dgrey">
+              <div className="flex justify-between items-center w-full text-xs font-light text-dlightblack">
                 <p>
                   <span>{item.type}</span>
                 </p>
