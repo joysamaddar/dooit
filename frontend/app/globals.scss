@@ -35,14 +35,13 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--dprimary);
+  background: $dlightblue;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 1rem;
+  background: $dblue;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--darkblue);
+  background: $dprimary;
 }
