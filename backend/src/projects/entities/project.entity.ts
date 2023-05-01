@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, ObjectIdColumn, ObjectId } from 'typeorm';
 import { Task } from './task.entity';
 
 @Entity()
@@ -7,7 +7,7 @@ import { Task } from './task.entity';
 export class Project {
   @ObjectIdColumn()
   @Field(() => ID)
-  _id: ObjectID;
+  _id: ObjectId;
 
   @Column()
   @Field()

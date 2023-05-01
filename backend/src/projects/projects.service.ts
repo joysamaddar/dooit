@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ArrayContains, MongoRepository } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { CreateProjectInput } from './dto/create-project.input';
 import { Project } from './entities/project.entity';
 import { ObjectId } from 'mongodb';
@@ -24,7 +24,9 @@ export class ProjectService {
     id: string,
     user: User,
   ): Promise<Project | NotFoundException> {
-    const project = await this.projectRepository.findOne(ObjectId(id));
+    const project = await this.projectRepository.findOneBy({
+      _id: new ObjectId(id),
+    });
     if (project && project.users.includes(user.username)) {
       return project;
     }
@@ -59,14 +61,16 @@ export class ProjectService {
     id: string,
     user: User,
   ): Promise<Project | NotFoundException> {
-    const project = await this.projectRepository.findOne(ObjectId(id));
+    const project = await this.projectRepository.findOneBy({
+      _id: new ObjectId(id),
+    });
     if (project.manager !== user.username) {
       return new UnauthorizedException(
         'Only project managers can delete a project!',
       );
     }
     const result = await this.projectRepository.findOneAndDelete({
-      _id: ObjectId(id),
+      _id: new ObjectId(id),
     });
     if (result.value) {
       return result.value;
@@ -80,7 +84,9 @@ export class ProjectService {
   ): Promise<Project | NotFoundException> {
     const { id } = updateProjectInput;
     delete updateProjectInput['id'];
-    let project = await this.projectRepository.findOne(ObjectId(id));
+    let project = await this.projectRepository.findOneBy({
+      _id: new ObjectId(id),
+    });
     if (!project) {
       return new NotFoundException();
     }
@@ -100,7 +106,9 @@ export class ProjectService {
     if (!exists) {
       throw new NotFoundException("The user with this username wasn't found");
     }
-    const project = await this.projectRepository.findOne(ObjectId(projectId));
+    const project = await this.projectRepository.findOneBy({
+      _id: new ObjectId(projectId),
+    });
     if (project.manager !== user.username) {
       throw new UnauthorizedException(
         'Only project managers can add users to a project.',
@@ -115,7 +123,9 @@ export class ProjectService {
     username: string,
     user: User,
   ): Promise<Project | UnauthorizedException> {
-    const project = await this.projectRepository.findOne(ObjectId(projectId));
+    const project = await this.projectRepository.findOneBy({
+      _id: new ObjectId(projectId),
+    });
     if (project.manager !== user.username) {
       throw new UnauthorizedException(
         'Only project managers can remove users from a project.',

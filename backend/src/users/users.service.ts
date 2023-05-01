@@ -48,7 +48,9 @@ export class UsersService {
   }
 
   async userWithId(id: string): Promise<User> {
-    return await this.userRepository.findOne(ObjectId(id));
+    return await this.userRepository.findOneBy({
+      _id: new ObjectId(id),
+    });
   }
 
   async changePassword(
@@ -58,7 +60,7 @@ export class UsersService {
     const { oldPassword, newPassword } = changePasswordInput;
     const result = await this.userRepository.findOne({
       where: {
-        _id: ObjectId(user._id),
+        _id: new ObjectId(user._id),
       },
     });
     if (await bcrypt.compare(oldPassword, result.password)) {

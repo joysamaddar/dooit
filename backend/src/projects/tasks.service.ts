@@ -15,7 +15,9 @@ export class TaskService {
 
   async getTask(taskInput: TaskInput): Promise<Task | NotFoundException> {
     const { projectId, id } = taskInput;
-    const project = await this.projectRepository.findOne(ObjectId(projectId));
+    const project = await this.projectRepository.findOneBy({
+      _id: new ObjectId(projectId),
+    });
     if (!project) {
       return new NotFoundException();
     }
@@ -30,7 +32,9 @@ export class TaskService {
     createTaskInput: CreateTaskInput,
   ): Promise<Project | NotFoundException> {
     const { projectId, name, type } = createTaskInput;
-    const project = await this.projectRepository.findOne(ObjectId(projectId));
+    const project = await this.projectRepository.findOneBy({
+      _id: new ObjectId(projectId),
+    });
     if (!project) {
       return new NotFoundException();
     }
@@ -40,13 +44,15 @@ export class TaskService {
 
   async deleteTask(taskInput: TaskInput): Promise<Project | NotFoundException> {
     const { projectId, id } = taskInput;
-    const project = await this.projectRepository.findOne(ObjectId(projectId));
+    const project = await this.projectRepository.findOneBy({
+      _id: new ObjectId(projectId),
+    });
     if (!project) {
       return new NotFoundException();
     }
     project.tasks = project.tasks.filter((data) => data.id != id);
     if (project.tasks.length === 0) {
-      await this.projectRepository.delete(ObjectId(project._id));
+      await this.projectRepository.delete(new ObjectId(project._id));
       project.tasks = [];
     }
     return await this.projectRepository.save(project);
@@ -56,7 +62,9 @@ export class TaskService {
     const { projectId, id } = taskInput;
     delete taskInput['projectId'];
     delete taskInput['id'];
-    const project = await this.projectRepository.findOne(ObjectId(projectId));
+    const project = await this.projectRepository.findOneBy({
+      _id: new ObjectId(projectId),
+    });
     if (!project) {
       return new NotFoundException();
     }
