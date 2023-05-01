@@ -10,7 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import authenticatedVar from "@/store/authenticated";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: "https://dooit.onrender.com/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
