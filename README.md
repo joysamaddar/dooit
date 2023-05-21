@@ -2,8 +2,13 @@
 
 A kanban board with a sleek design and intuitive UX.
 
+<img src="frontend/public/mockup.png" alt="Project mockup">
+
 ## Live Demo
-[https://dooit.vercel.app/](https://dooit.vercel.app/)
+**WEBSITE** - [https://dooit.vercel.app/](https://dooit.vercel.app/)
+
+<img src="project_showcase.gif" alt="Project Showcase GIF">
+
 
 ## Features
 - Beautiful drag and drop kanban board
@@ -12,17 +17,17 @@ A kanban board with a sleek design and intuitive UX.
 - Get tasks progress and other statistics
 - Optimised for both mobile and web
 
-
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables.
-- For backend add the following in the .dev.env and .prod.env files
+
+For backend add the following in the .dev.env and .prod.env files
 
 `MONGODB_DATABASE_URL`
 
 `JWT_SECRET`
 
-- For frontend add the following in the .env.local file
+For frontend add the following in the .env.local file
 
 `NEXT_PUBLIC_GRAPHQL_SERVER_URL`
 
