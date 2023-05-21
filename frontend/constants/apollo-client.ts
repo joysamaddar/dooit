@@ -3,14 +3,13 @@ import {
   createHttpLink,
   InMemoryCache,
   from,
-  defaultDataIdFromObject,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 import authenticatedVar from "@/store/authenticated";
 
 const httpLink = createHttpLink({
-  uri: "https://dooit.onrender.com/graphql",
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_SERVER_URL
 });
 
 const authLink = setContext((_, { headers }) => {
