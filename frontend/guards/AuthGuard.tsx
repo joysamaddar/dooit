@@ -38,6 +38,7 @@ const AuthGuard = ({
         _id: user.validateUser._id,
         username: user.validateUser.username,
       });
+      authenticatedVar(true);
     }
   }, [user]);
 
@@ -70,7 +71,15 @@ const AuthGuard = ({
       {publicRoutes?.includes(path) || unprotectedRoutes?.includes(path) ? (
         <>{children}</>
       ) : (
-        <>{user && children}</>
+        <>
+          {!user ? (
+            <div className="relative h-full flex-1 w-full flex items-center justify-center">
+              <div className="btn btn-ghost loading text-dblack"></div>
+            </div>
+          ) : (
+            children
+          )}
+        </>
       )}
     </>
   );

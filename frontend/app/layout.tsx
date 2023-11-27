@@ -15,16 +15,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="dooit-theme">
-      <body className="text-dblack">
-        <AuthGuard publicRoutes={["/"]} unprotectedRoutes={["/login", "/signup"]}>
+      <body className="text-dblack min-h-screen flex flex-col">
+        <AuthGuard
+          publicRoutes={["/"]}
+          unprotectedRoutes={["/login", "/signup"]}
+        >
           <>
             <Nav />
-            <main>
-              {children}
-            </main>
+            <main>{children}</main>
           </>
         </AuthGuard>
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );
